@@ -20,7 +20,27 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+To use this gem, just initialize it in some initializer like `config/initializers/notifications.rb`
+
+then create an instance and subscribe it to `ActiveSupport::Notifications` events.
+
+    FLATFOOT = Flatfoot::Tracker.new(Redis.new)
+
+	ActiveSupport::Notifications.subscribe /render_partial.action_view|render_template.action_view/ do |name, start, finish, id, payload|
+	  FLATFOOT.track_views(name, start, finish, id, payload) unless name.include?('!') 
+    end
+
+Start up your app and then in console you can check used views or unused views
+
+	FLATFOOT.used_views
+	=> ["app/views/layouts/_flash.html.erb",...
+	
+	FLATFOOT.unused_views
+    => ["app/views/something/_old_partial.html.erb",...
+
+After making changes deploying or just to clear out the Redis size you can clear the saved data.
+
+	FLATFOOT.reset_recordings
 
 ## Contributing
 
