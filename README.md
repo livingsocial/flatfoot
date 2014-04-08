@@ -1,6 +1,8 @@
 # Flatfoot
 
-TODO: Write a gem description
+[Flatfoot is a synonym for tracker](http://thesaurus.com/browse/tracker). As the name RenderTracker seemed generic, and gumshoe my favorite was taken.
+
+This gem will help you track unused views in your application.
 
 ## Installation
 
