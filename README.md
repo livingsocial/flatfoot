@@ -42,9 +42,15 @@ After making changes deploying or just to clear out the Redis size you can clear
 
 	FLATFOOT.reset_recordings
 
-If you set the `FLATFOOT` constant in a initializer you can also use the included rake tasks.
+If you set the `FLATFOOT` constant in a initializer you can also use the included rake tasks. Edit your `Rakefile` and add
 
+    require 'flatfoot/tasks'
 
+Then you should have tasks to help view the flatfoot data
+
+    rake flatfoot:reset   # reset tracked views
+    rake flatfoot:unused  # report unused views
+    rake flatfoot:used    # report used views
 
 ## Contributing
 
@@ -53,3 +59,7 @@ If you set the `FLATFOOT` constant in a initializer you can also use the include
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+## MIT LICENSE
+
+view the LICENSE.txt for details
