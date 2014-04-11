@@ -19,7 +19,7 @@ namespace :flatfoot do
   end
 
   desc "reset tracked views"
-  task :used => :environment do
+  task :reset => :environment do
     if FLATFOOT
       Flatfoot::Tracker.reset_recordings
     else
