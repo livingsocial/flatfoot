@@ -42,6 +42,10 @@ After making changes deploying or just to clear out the Redis size you can clear
 
 	FLATFOOT.reset_recordings
 
+If you set the `FLATFOOT` constant in a initializer you can also use the included rake tasks.
+
+
+
 ## Contributing
 
 1. Fork it
