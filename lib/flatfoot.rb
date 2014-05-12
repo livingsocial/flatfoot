@@ -1,4 +1,5 @@
 require "flatfoot/version"
+require 'timeout'
 
 module Flatfoot
   
@@ -13,23 +14,27 @@ module Flatfoot
     end
     
     def track_views(name, start, finish, id, payload)
-      if file = payload[:identifier]
-        unless logged_views.include?(file)
-          logged_views << file
-          store.sadd(tracker_key, file)
+      begin
+        if file = payload[:identifier]
+          unless logged_views.include?(file)
+            logged_views << file
+            store.sadd(tracker_key, file)
+          end
         end
-      end
-      ###
-      # Annoyingly while you get full path for templates
-      # notifications only pass part of the path for layouts dropping any format info
-      # such as .html.erb or .js.erb
-      # http://edgeguides.rubyonrails.org/active_support_instrumentation.html#render_partial-action_view
-      ###
-      if layout_file = payload[:layout]
-        unless logged_views.include?(layout_file)
-          logged_views << layout_file
-          store.sadd(tracker_key, layout_file)
+        ###
+        # Annoyingly while you get full path for templates
+        # notifications only pass part of the path for layouts dropping any format info
+        # such as .html.erb or .js.erb
+        # http://edgeguides.rubyonrails.org/active_support_instrumentation.html#render_partial-action_view
+        ###
+        if layout_file = payload[:layout]
+          unless logged_views.include?(layout_file)
+            logged_views << layout_file
+            store.sadd(tracker_key, layout_file)
+          end
         end
+      rescue Errno::EAGAIN, Timeout::Error
+        #we don't want to raise errors if flatfoot can't reach redis. This is a nice to have not a bring the system down
       end
     end
 
