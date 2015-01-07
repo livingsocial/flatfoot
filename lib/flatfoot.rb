@@ -2,7 +2,7 @@ require "flatfoot/version"
 require 'timeout'
 
 module Flatfoot
-  
+
   class Tracker
 
     DEFAULT_TARGET = Dir.glob('app/views/**/*.html.erb').reject{ |file| file.match(/(_mailer)/) }
@@ -14,7 +14,7 @@ module Flatfoot
       @logged_views = []
       @roots = options.fetch(:roots){ "#{Rails.root.to_s}/" }.split(',')
     end
-    
+
     def track_views(name, start, finish, id, payload)
       begin
         if file = payload[:identifier]
@@ -44,11 +44,11 @@ module Flatfoot
       views = store.smembers(tracker_key)
       normalized_views = []
       views.each do |view|
-             roots.each do |root|
-                    view = view.gsub(/#{root}/,'')
-                  end
-             normalized_views << view
-           end
+        roots.each do |root|
+          view = view.gsub(/#{root}/,'')
+        end
+        normalized_views << view
+      end
       normalized_views
     end
 
