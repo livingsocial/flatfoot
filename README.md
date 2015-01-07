@@ -32,7 +32,7 @@ then create an instance and subscribe it to `ActiveSupport::Notifications` event
 
 ### Customising Targets
 
-Flatfoot default lookup is *app/views/**/*.html.erb'* rejecting all mailer views.
+Flatfoot default lookup is `app/views/**/*.html.erb` rejecting all mailer views.
 This will cover many apps but sometimes your project has different characteristics as:
   - using other view markup language as Haml;
   - using different folder structure (engines, for example), or;
