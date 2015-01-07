@@ -30,24 +30,6 @@ then create an instance and subscribe it to `ActiveSupport::Notifications` event
 	  FLATFOOT.track_views(name, start, finish, id, payload) unless name.include?('!') 
     end
 
-### Customising Targets
-
-Flatfoot default lookup is `app/views/**/*.html.erb` rejecting all mailer views.
-This will cover many apps but sometimes your project has different characteristics as:
-  - using other view markup language as Haml;
-  - using different folder structure (engines, for example), or;
-  - you want to analyze parts of your app (/admin, for example).
-
-The only change you need in your initialize is define your target during tracker
-initialization as example below:
-
-```ruby
-target = Dir.glob("app/views/admin/**/*.html.haml").reject do |file|
-  file.match(/(_mailer)/)
-end
-FLATFOOT = Flatfoot::Tracker.new(Redis.new, target)
-```
-
 Start up your app and then in console you can check used views or unused views
 
 	FLATFOOT.used_views
@@ -69,6 +51,24 @@ Then you should have tasks to help view the flatfoot data
     rake flatfoot:reset   # reset tracked views
     rake flatfoot:unused  # report unused views
     rake flatfoot:used    # report used views
+
+### Customising Targets
+
+Flatfoot default lookup is `app/views/**/*.html.erb` rejecting all mailer views.
+This will cover many apps but sometimes your project has different characteristics as:
+  - using other view markup language as Haml;
+  - using different folder structure (engines, for example), or;
+  - you want to analyze parts of your app (/admin, for example).
+
+The only change you need in your initialize is define your target during tracker
+initialization as example below:
+
+```ruby
+target = Dir.glob("app/views/admin/**/*.html.haml").reject do |file|
+  file.match(/(_mailer)/)
+end
+FLATFOOT = Flatfoot::Tracker.new(Redis.new, target)
+```
 
 ## Contributing
 
