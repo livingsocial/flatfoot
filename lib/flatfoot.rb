@@ -5,10 +5,12 @@ module Flatfoot
   
   class Tracker
 
-    attr_accessor :store, :logged_views, :roots
+    DEFAULT_TARGET = Dir.glob('app/views/**/*.html.erb').reject{ |file| file.match(/(_mailer)/) }
+    attr_accessor :store, :target, :logged_views, :roots
 
-    def initialize(store, options = {})
+    def initialize(store, target = DEFAULT_TARGET, options = {})
       @store = store
+      @target = target
       @logged_views = []
       @roots = options.fetch(:roots){ "#{Rails.root.to_s}/" }.split(',')
     end
@@ -51,9 +53,8 @@ module Flatfoot
     end
 
     def unused_views
-      all_views = Dir.glob('app/views/**/*.html.erb').reject{|file| file.match(/(_mailer)/)}
       recently_used_views = used_views
-      all_views = all_views.reject{ |view| recently_used_views.include?(view) }
+      all_views = target.reject{ |view| recently_used_views.include?(view) }
       # since layouts don't include format we count them used if they match with ANY formats
       all_views = all_views.reject{ |view| view.match(/\/layouts\//) && recently_used_views.any?{|used_view| view.include?(used_view)} }
     end
