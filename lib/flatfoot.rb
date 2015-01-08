@@ -8,9 +8,9 @@ module Flatfoot
     DEFAULT_TARGET = Dir.glob('app/views/**/*.html.erb').reject{ |file| file.match(/(_mailer)/) }
     attr_accessor :store, :target, :logged_views, :roots
 
-    def initialize(store, target = DEFAULT_TARGET, options = {})
+    def initialize(store, options = {})
       @store = store
-      @target = target
+      @target = options[:target] || DEFAULT_TARGET
       @logged_views = []
       @roots = options.fetch(:roots){ "#{Rails.root.to_s}/" }.split(',')
     end

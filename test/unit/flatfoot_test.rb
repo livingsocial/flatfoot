@@ -6,6 +6,7 @@ class ReporterTest < Test::Unit::TestCase
     tracker = Flatfoot::Tracker.new("store", {:roots => 'dir'})
     assert_equal 'dir', tracker.roots.first
     assert_equal 'store', tracker.store
+    assert_equal [], tracker.target
     assert_equal [], tracker.logged_views
   end
 
@@ -34,8 +35,8 @@ class ReporterTest < Test::Unit::TestCase
 
   should "report unused partials" do
     store = fake_store
-    Dir.expects(:glob).returns(['file', 'not_used'])
-    tracker = Flatfoot::Tracker.new(store, {:roots => 'dir'})
+    target = ['file', 'not_used']
+    tracker = Flatfoot::Tracker.new(store, {:roots => 'dir', :target => target})
     tracker.track_views('name', 'start', 'finish', 'id', {:identifier => 'file'})
     assert_equal ['not_used'], tracker.unused_views
   end
