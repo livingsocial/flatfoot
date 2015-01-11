@@ -52,6 +52,24 @@ Then you should have tasks to help view the flatfoot data
     rake flatfoot:unused  # report unused views
     rake flatfoot:used    # report used views
 
+### Customising Targets
+
+Flatfoot default lookup is `app/views/**/*.html.erb` rejecting all mailer views.
+This will cover many apps but sometimes your project has different characteristics as:
+  - using other view markup language as Haml;
+  - using different folder structure (engines, for example), or;
+  - you want to analyze parts of your app (/admin, for example).
+
+The only change you need in your initialize is define your target during tracker
+initialization as example below:
+
+```ruby
+target = Dir.glob("app/views/admin/**/*.html.haml").reject do |file|
+  file.match(/(_mailer)/)
+end
+FLATFOOT = Flatfoot::Tracker.new(Redis.new, options: { target: target })
+```
+
 ## Contributing
 
 1. Fork it

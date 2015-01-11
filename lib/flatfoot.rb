@@ -2,17 +2,19 @@ require "flatfoot/version"
 require 'timeout'
 
 module Flatfoot
-  
+
   class Tracker
 
-    attr_accessor :store, :logged_views, :roots
+    DEFAULT_TARGET = Dir.glob('app/views/**/*.html.erb').reject{ |file| file.match(/(_mailer)/) }
+    attr_accessor :store, :target, :logged_views, :roots
 
     def initialize(store, options = {})
       @store = store
+      @target = options[:target] || DEFAULT_TARGET
       @logged_views = []
       @roots = options.fetch(:roots){ "#{Rails.root.to_s}/" }.split(',')
     end
-    
+
     def track_views(name, start, finish, id, payload)
       begin
         if file = payload[:identifier]
@@ -42,18 +44,17 @@ module Flatfoot
       views = store.smembers(tracker_key)
       normalized_views = []
       views.each do |view|
-             roots.each do |root|
-                    view = view.gsub(/#{root}/,'')
-                  end
-             normalized_views << view
-           end
+        roots.each do |root|
+          view = view.gsub(/#{root}/,'')
+        end
+        normalized_views << view
+      end
       normalized_views
     end
 
     def unused_views
-      all_views = Dir.glob('app/views/**/*.html.erb').reject{|file| file.match(/(_mailer)/)}
       recently_used_views = used_views
-      all_views = all_views.reject{ |view| recently_used_views.include?(view) }
+      all_views = target.reject{ |view| recently_used_views.include?(view) }
       # since layouts don't include format we count them used if they match with ANY formats
       all_views = all_views.reject{ |view| view.match(/\/layouts\//) && recently_used_views.any?{|used_view| view.include?(used_view)} }
     end
