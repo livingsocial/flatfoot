@@ -67,7 +67,7 @@ initialization as example below:
 target = Dir.glob("app/views/admin/**/*.html.haml").reject do |file|
   file.match(/(_mailer)/)
 end
-FLATFOOT = Flatfoot::Tracker.new(Redis.new, options: { target: target })
+FLATFOOT = Flatfoot::Tracker.new(Redis.new, target: target)
 ```
 
 ## Contributing
